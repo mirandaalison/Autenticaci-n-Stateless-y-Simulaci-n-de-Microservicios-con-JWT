@@ -15,13 +15,12 @@ export class AuthController {
             });
         }
 
-        const payload = {
-            sub: username,
-            role: 'admin',
-            username
+        const user = {
+            id: username,
+            name: username
         };
 
-        const token = JwtService.signToken(payload);
+        const token = JwtService.signToken(user);
 
         return res.status(200).json({
             token,
