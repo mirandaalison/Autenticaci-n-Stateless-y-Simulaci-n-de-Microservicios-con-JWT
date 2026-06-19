@@ -4,37 +4,36 @@ import { config } from '../config/env.js';
 export class JwtService {
     /**
      * Firma un token JWT basándose en el algoritmo configurado.
-     * @param {Object} user - Datos básicos del usuario.
+     * @param {Object} payload - Los datos del usuario a incluir en el token.
      * @returns {string} El token JWT generado.
      */
-    static signToken(user) {
-        const payload = {
-            sub: user.id || user.sub,
-            name: user.name || user.fullName || user.username,
-            exp: Math.floor(Date.now() / 1000) + 60
-        };
-
-        const secretOrKey = config.ALGORITHM === 'RS256'
+    static signToken(payload) {
+        const secretOrPrivateKey = config.ALGORITHM === 'RS256'
             ? config.PRIVATE_KEY
             : config.JWT_SECRET;
 
-        return jwt.sign(payload, secretOrKey, {
-            algorithm: config.ALGORITHM
+        return jwt.sign(payload, secretOrPrivateKey, {
+            algorithm: config.ALGORITHM,
+            expiresIn: '1h'
         });
     }
 
     /**
      * Verifica un token JWT basándose en el algoritmo configurado.
      * @param {string} token - El token JWT a verificar.
-     * @returns {Object} El payload decodificado.
+     * @returns {Object|null} El payload decodificado o null si es inválido.
      */
     static verifyToken(token) {
-        const secretOrKey = config.ALGORITHM === 'RS256'
+        const secretOrPublicKey = config.ALGORITHM === 'RS256'
             ? config.PUBLIC_KEY
             : config.JWT_SECRET;
 
-        return jwt.verify(token, secretOrKey, {
-            algorithms: [config.ALGORITHM]
-        });
+        try {
+            return jwt.verify(token, secretOrPublicKey, {
+                algorithms: [config.ALGORITHM]
+            });
+        } catch (error) {
+            return null;
+        }
     }
 }

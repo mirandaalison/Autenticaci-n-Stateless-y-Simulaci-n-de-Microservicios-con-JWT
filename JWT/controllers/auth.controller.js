@@ -7,21 +7,25 @@ export class AuthController {
     static async generateToken(req, res) {
         const { username, password } = req.body;
 
-        if (username === 'admin' && password === 'admin123') {
-            const user = {
-                id: 'user-001',
-                name: 'Administrador'
-            };
+        const isValidCredentials = username === 'admin' && password === '1234';
 
-            const token = JwtService.signToken(user);
-            return res.status(200).json({
-                token,
-                message: 'Token generado correctamente'
+        if (!isValidCredentials) {
+            return res.status(401).json({
+                message: 'Credenciales inválidas'
             });
         }
 
-        return res.status(401).json({
-            message: 'Credenciales inválidas'
+        const payload = {
+            sub: username,
+            role: 'admin',
+            username
+        };
+
+        const token = JwtService.signToken(payload);
+
+        return res.status(200).json({
+            token,
+            message: 'Token generado correctamente'
         });
     }
 }

@@ -10,26 +10,14 @@ export const authMiddleware = (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
+    const payload = JwtService.verifyToken(token);
 
-    try {
-        const payload = JwtService.verifyToken(token);
-        req.user = payload;
-        return next();
-    } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(403).json({
-                message: 'Token expirado'
-            });
-        }
-
-        if (error.name === 'JsonWebTokenError' && error.message.includes('algorithm')) {
-            return res.status(403).json({
-                message: 'Algoritmo de token inválido'
-            });
-        }
-
+    if (!payload) {
         return res.status(403).json({
-            message: 'Token inválido'
+            message: 'Token inválido o expirado'
         });
     }
+
+    req.user = payload;
+    return next();
 };
