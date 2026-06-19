@@ -4,6 +4,7 @@ export class ResourceController {
      */
     static getAlphaPrivateData(req, res) {
         return res.status(200).json({
+            service: 'service-alpha',
             message: 'Acceso concedido al Servicio Alpha',
             user: req.user
         });
@@ -14,6 +15,7 @@ export class ResourceController {
      */
     static getBetaPrivateData(req, res) {
         return res.status(200).json({
+            service: 'service-beta',
             message: 'Acceso concedido al Servicio Beta',
             user: req.user
         });
