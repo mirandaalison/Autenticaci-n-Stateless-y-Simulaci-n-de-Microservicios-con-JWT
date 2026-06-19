@@ -17,14 +17,32 @@ export const authMiddleware = (req, res, next) => {
         });
     }
 
-    const payload = JwtService.verifyToken(token);
+    try {
+        const payload = JwtService.verifyToken(token);
 
-    if (!payload || typeof payload !== 'object') {
+        if (!payload || typeof payload !== 'object') {
+            return res.status(403).json({
+                message: 'Token inválido o expirado'
+            });
+        }
+
+        req.user = payload;
+        return next();
+    } catch (error) {
+        if (error?.name === 'JsonWebTokenError') {
+            return res.status(403).json({
+                message: 'Algoritmo inválido o firma incorrecta'
+            });
+        }
+
+        if (error?.name === 'TokenExpiredError') {
+            return res.status(403).json({
+                message: 'Token expirado'
+            });
+        }
+
         return res.status(403).json({
-            message: 'Token inválido o expirado'
+            message: 'Error al verificar el token'
         });
     }
-
-    req.user = payload;
-    return next();
 };
