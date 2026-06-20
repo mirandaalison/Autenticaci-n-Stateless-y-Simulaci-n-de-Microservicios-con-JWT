@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/node';
-import { config } from './config/env.js';
 
 Sentry.init({
-    dsn: config.SENTRY_DSN,
-    environment: config.SENTRY_ENVIRONMENT,
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.SENTRY_ENVIRONMENT || 'development',
+    enabled: Boolean(process.env.SENTRY_DSN),
     dataCollection: {
         // userInfo: false,
         // httpBodies: []
