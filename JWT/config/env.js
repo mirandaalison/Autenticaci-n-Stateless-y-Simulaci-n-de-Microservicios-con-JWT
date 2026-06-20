@@ -9,6 +9,6 @@ export const config = {
     PRIVATE_KEY: process.env.PRIVATE_KEY_PATH ? fs.readFileSync(process.env.PRIVATE_KEY_PATH, 'utf8') : null,
     PUBLIC_KEY: process.env.PUBLIC_KEY_PATH ? fs.readFileSync(process.env.PUBLIC_KEY_PATH, 'utf8') : null,
     ALGORITHM: process.env.JWT_ALGORITHM || 'HS256', // 'HS256' o 'RS256'
-    SENTRY_DSN: process.env.SENTRY_DSN || '',
+    SENTRY_DSN: process.env.SENTRY_DSN || 'https://080a2bf6a3794e30afbc74f28cca4b30@o4511580700213248.ingest.us.sentry.io/4511598866989056',
     SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT || 'development'
 };
