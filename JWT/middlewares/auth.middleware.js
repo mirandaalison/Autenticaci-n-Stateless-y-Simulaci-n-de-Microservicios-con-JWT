@@ -13,7 +13,7 @@ export const authMiddleware = (req, res, next) => {
 
     if (!token) {
         return res.status(401).json({
-            message: 'Formato de token inválido'
+            message: 'Token malformado o vacío'
         });
     }
 
@@ -22,7 +22,7 @@ export const authMiddleware = (req, res, next) => {
 
         if (!payload || typeof payload !== 'object') {
             return res.status(403).json({
-                message: 'Token inválido o expirado'
+                message: 'Token expirado o inválido'
             });
         }
 
